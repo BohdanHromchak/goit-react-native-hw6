@@ -6,6 +6,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import MapScreen from "./Screens/mainScreen/MapScreen";
 import CommentsScreen from "./Screens/mainScreen/CommentsScreen";
 import Home from "./Screens/mainScreen/Home";
+import { Provider } from "react-redux";
+import { store } from "./Redux/store";
 
 const AuthStack = createStackNavigator();
 
@@ -21,6 +23,7 @@ export default function App() {
   }
 
   return (
+    <Provider store={store}>
     <NavigationContainer>
       <AuthStack.Navigator>
         <AuthStack.Screen
@@ -56,5 +59,6 @@ export default function App() {
         />
       </AuthStack.Navigator>
     </NavigationContainer>
+    </Provider>
   );
 }
