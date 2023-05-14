@@ -6,7 +6,6 @@ import Home from "./Screens/mainScreen/Home";
 import CommentsScreen from "./Screens/mainScreen/CommentsScreen";
 import MapScreen from "./Screens/mainScreen/MapScreen";
 
-
 const AuthStack = createStackNavigator();
 
 export const useRoute = (isAuth) => {

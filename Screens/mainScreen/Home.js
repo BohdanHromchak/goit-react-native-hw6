@@ -4,15 +4,21 @@ import CreatePostsScreen from "./CreatePostsScreen";
 import ProfileScreen from "./ProfileScreen";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
+import { authSignOutUser } from "../../Redux/authOperations";
+import { useDispatch } from "react-redux";
 
 const BottomTab = createBottomTabNavigator();
 
 export default function Home({ navigation }) {
+  const dispatch = useDispatch();
+  const signOut = () => {
+    dispatch(authSignOutUser());
+  };
+
   return (
     <BottomTab.Navigator
       initialRouteName="Публикации"
       screenOptions={{
-     
         headerTitleAlign: "center",
         headerStyle: styles.header,
         tabBarShowLabel: false,
@@ -21,7 +27,7 @@ export default function Home({ navigation }) {
           alignItems: "center",
           height: 83,
           borderTopWidth: 1,
-          borderTopColor: '#BDBDBD',
+          borderTopColor: "#BDBDBD",
         },
         headerTitleStyle: styles.headerTitle,
       }}
@@ -33,10 +39,7 @@ export default function Home({ navigation }) {
           ),
 
           headerRight: () => (
-            <Pressable
-              onPress={() => navigation.navigate("Login")}
-              style={{ marginRight: 16 }}
-            >
+            <Pressable onPress={signOut} style={{ marginRight: 16 }}>
               <Feather name="log-out" size={24} color="#BDBDBD" />
             </Pressable>
           ),
@@ -59,11 +62,10 @@ export default function Home({ navigation }) {
               <AntDesign name="arrowleft" size={24} color="#212121CC" />
             </Pressable>
           ),
-           tabBarStyle: { display: "none" },
+          tabBarStyle: { display: "none" },
         }}
         name="Создать публикацию"
         component={CreatePostsScreen}
-        
       />
       <BottomTab.Screen
         options={{
@@ -90,12 +92,12 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Medium",
     fontSize: 17,
   },
-  plusIcon: { 
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: "#FF6C00", 
-    width: 70, 
+  plusIcon: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FF6C00",
+    width: 70,
     height: 40,
-    borderRadius: 20, 
-},
+    borderRadius: 20,
+  },
 });
