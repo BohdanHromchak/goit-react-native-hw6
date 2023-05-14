@@ -57,7 +57,10 @@ export default function PostsScreen({ navigation }) {
               <Pressable
                 style={styles.comments}
                 onPress={() => {
-                  navigation.navigate("Комментарии", { image: item.photo });
+                  navigation.navigate("Комментарии", {
+                    image: item.photo,
+                    postId: item.id,
+                  });
                 }}
               >
                 <EvilIcons name="comment" size={24} color="#BDBDBD" />
