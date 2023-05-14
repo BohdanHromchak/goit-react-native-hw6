@@ -12,6 +12,8 @@ import {
   Pressable,
   Image,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { authSignInUser } from "../../Redux/authOperations";
 
 const initialState = {
   login: "",
@@ -27,6 +29,8 @@ export default function RegistrationScreen({ navigation }) {
   const [isPasswordFocus, setIsPasswordFocus] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
+  const dispatch = useDispatch()
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -35,8 +39,9 @@ export default function RegistrationScreen({ navigation }) {
   const handleSubmit = () => {
     keyboardHide();
     console.log(state);
+    dispatch(authSignInUser(state))
     setState(initialState);
-    navigation.navigate("Home")
+    // navigation.navigate("Home")
   };
 
   return (

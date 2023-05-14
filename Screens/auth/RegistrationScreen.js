@@ -13,11 +13,13 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import { useDispatch } from "react-redux";
+import { authSignUpUser } from "../../Redux/authOperations";
 
 const initialState = {
-  login: "",
   email: "",
   password: "",
+  login: "",
 };
 
 export default function RegistrationScreen({ navigation }) {
@@ -29,6 +31,8 @@ export default function RegistrationScreen({ navigation }) {
   const [isPasswordFocus, setIsPasswordFocus] = useState(false);
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
 
+  const dispatch = useDispatch();
+
   const keyboardHide = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
@@ -36,9 +40,10 @@ export default function RegistrationScreen({ navigation }) {
 
   const handleSubmit = () => {
     keyboardHide();
+    dispatch(authSignUpUser(state))
     console.log(state);
     setState(initialState);
-    navigation.navigate("Home")
+    // navigation.navigate("Home");
   };
 
   return (
@@ -85,7 +90,6 @@ export default function RegistrationScreen({ navigation }) {
                   }
                   placeholder="Адрес электронной почты"
                   placeholderTextColor={"#BDBDBD"}
-       
                   style={{
                     ...styles.input,
                     borderColor: isEmailFocus ? "#ff6c00" : "#e8e8e8",
@@ -143,7 +147,6 @@ export default function RegistrationScreen({ navigation }) {
                   <Pressable
                     onPress={() => navigation.navigate("Login")}
                     style={{
-                     
                       marginBottom: 50,
                     }}
                   >
