@@ -41,9 +41,7 @@ export default function RegistrationScreen({ navigation }) {
   const handleSubmit = () => {
     keyboardHide();
     dispatch(authSignUpUser(state))
-    // console.log(state);
     setState(initialState);
-    // navigation.navigate("Home");
   };
 
   return (

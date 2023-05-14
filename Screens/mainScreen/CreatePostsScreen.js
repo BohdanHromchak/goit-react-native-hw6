@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   Text,
   StyleSheet,
@@ -15,6 +16,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import * as Location from "expo-location";
+import db from "../../Firebase/config";
 
 export default function CreatePostsScreen({ navigation }) {
   const [name, setName] = useState("");
@@ -27,6 +29,8 @@ export default function CreatePostsScreen({ navigation }) {
   const [photo, setPhoto] = useState(null);
 
   const [photoLocation, setPhotoLocation] = useState(null);
+
+  const { userId, login } = useSelector((state) => state.auth);
 
   const keyboardHide = () => {
     setIsShowKeyboard(false);
@@ -53,12 +57,44 @@ export default function CreatePostsScreen({ navigation }) {
   };
 
   const sendPhoto = () => {
-    navigation.navigate("Публикации", { photo, name, location, ...photoLocation });
+    uploadPostToServer();
+    navigation.navigate("Публикации", {
+      photo,
+      name,
+      location,
+      ...photoLocation,
+    });
     setName("");
     setLocation("");
     setPhoto(null);
     setIsShowKeyboard(false);
     // console.log({ photo, name, location, ...photoLocation })
+  };
+
+  const uploadPostToServer = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await db
+      .firestore()
+      .collection("posts")
+      .add({ photo, name, location, userId, login,  ...photoLocation });
+ 
+  };
+
+  const uploadPhotoToServer = async () => {
+    const response = await fetch(photo);
+    const file = await response.blob();
+
+    const uniquePostId = Date.now().toString();
+
+    await db.storage().ref(`postImage/${uniquePostId}`).put(file);
+
+    const processedPhoto = await db
+      .storage()
+      .ref("postImage")
+      .child(uniquePostId)
+      .getDownloadURL();
+
+    return processedPhoto;
   };
 
   return (

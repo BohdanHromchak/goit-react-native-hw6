@@ -9,38 +9,23 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
+import db from "../../Firebase/config";
 
-const initialPosts = [
-  // {
-  //   photo: require("../../assets/images/post1.png"),
-  //   name: "Лес",
-  //   location: "Ukraine",
-  //   comments: 0,
-  // },
-  // {
-  //   photo: require("../../assets/images/post2.png"),
-  //   name: "Закат на Черном море",
-  //   location: "Ukraine",
-  //   comments: 0,
-  // },
-  // {
-  //   photo: require("../../assets/images/post3.png"),
-  //   name: "Старый домик в Венеции",
-  //   location: "Italy",
-  //   comments: 0,
-  // },
-];
-
-export default function PostsScreen({ route, navigation }) {
-  // console.log(route.params);
-
+export default function PostsScreen({ navigation }) {
   const [posts, setPosts] = useState([]);
 
+  const getAllPost = async () => {
+    await db
+      .firestore()
+      .collection("posts")
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+  };
+
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
+    getAllPost();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -81,7 +66,13 @@ export default function PostsScreen({ route, navigation }) {
 
               <Pressable
                 style={styles.location}
-                onPress={() => navigation.navigate("Карта", {name: item.name, latitude: item.latitude, longitude: item.longitude})}
+                onPress={() =>
+                  navigation.navigate("Карта", {
+                    name: item.name,
+                    latitude: item.latitude,
+                    longitude: item.longitude,
+                  })
+                }
               >
                 <Ionicons
                   name="ios-location-outline"
